@@ -5,7 +5,7 @@ from datetime import datetime
 
 class VersionControl(S3ObjectManager):
 
-    def __init__(self, bucket_name, project_name, step, data=None, object_data=None):
+    def __init__(self, bucket_name, project_name, step, data=None, object_data=None, **kwargs):
         S3ObjectManager.__init__(self, bucket_name, project_name)
         self.file_hash = str(uuid4())
         self.step = step
