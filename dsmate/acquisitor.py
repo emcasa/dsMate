@@ -19,18 +19,20 @@ class Acquisitor:
         self.sql = sql
         self.dataframe = None
         self.filename = None
-        self.athena = Athena(**params)
+        self.params = params
 
     def execute_query(self):
         """
         Execute query and save data to S3
         """
-        self.filename = self.athena.query_to_s3(self.sql)
+        athena = Athena(**self.params)
+        self.filename = athena.query_to_s3(self.sql)
         return self.filename
 
     def load_dataframe(self):
         """
         Load data from S3 file.
         """
-        df = pd.read_csv(self.athena.s3_path + '/' + self.filename)
+        athena = Athena(**self.params)
+        df = pd.read_csv(athena.s3_path + '/' + self.filename)
         return df
