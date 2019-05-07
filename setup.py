@@ -7,7 +7,7 @@ setup(
     name='dsMate',
     version='0.1.0',
     packages=find_packages(),
-    install_requires=['boto3', 'botocore', 'pandas',],
+    install_requires=['boto3', 'botocore', 'pandas', 's3fs'],
     keywords='versioncontrol machinelearning datascience ds ml',
     url='https://github.com/emcasa/dsmate',
     classifiers=['Development Status :: 3 - Alpha', 'Programming Language :: Python :: 3.6'],
