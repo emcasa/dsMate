@@ -3,7 +3,7 @@ import pandas as pd
 from dsmate.framework import VersionControl
 
 
-class Acquisitor:
+class AthenaAcquisitor:
     """
     Executes a query on AWS Athena, saves to S3 and loads a Pandas Dataframe.
 
