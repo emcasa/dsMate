@@ -15,6 +15,9 @@ class Athena:
         self.client = self.session.client('athena', region_name=self.region)
 
     def query(self, sql):
+        """
+        Execute the provided SQL against AWS Athena
+        """
         response = self.client.start_query_execution(
             QueryString=sql,
             QueryExecutionContext={'Database': self.database},
@@ -25,6 +28,9 @@ class Athena:
         return response
 
     def query_to_s3(self, sql, max_execution=20):
+        """
+        Save the query results to S3 as CSV file
+        """
         execution = self.query(sql)
         execution_id = execution['QueryExecutionId']
         state = 'RUNNING'

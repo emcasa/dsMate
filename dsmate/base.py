@@ -71,6 +71,9 @@ class BaseClass:
         return file_data.getvalue()
 
     def list_objects(self, step: str, data_type: str):
+        """
+        List all objects in a gives version control bucket
+        """
         directory_name = "{}/{}/{}".format(self.project_name, step, data_type)
         contents = self.s3_client.list_objects(
             Bucket=self.bucket_name,
@@ -81,18 +84,24 @@ class BaseClass:
 
     @staticmethod
     def allowed_steps():
+        """
+        List all allowed steps of modelling for version control
+        """
         print(json.dumps(ALLOWED_STEPS, indent=4))
 
 
 class S3ObjectManager(BaseClass):
 
-    def __init__(self, bucket_name, project_name):
-        BaseClass.__init__(self, bucket_name, project_name)
-
     def list_files(self, step: str, data_type):
+        """
+        List all files inside version control bucket
+        """
         return self.list_objects(step=step, data_type=data_type)
 
     def _save(self, step: str, data_type: str, file_hash: str, file_data):
+        """
+        Pickle data and save it to version control bucket
+        """
         file_data = pickle.dumps(file_data)
         self.put_object(
             step=step,
@@ -103,6 +112,9 @@ class S3ObjectManager(BaseClass):
         return True
 
     def _load(self, step: str, data_type: str, file_hash: str):
+        """
+        Load specific versioned data from bucket.
+        """
         file_data = self.get_object(
             step=step,
             data_type=data_type,
@@ -111,6 +123,9 @@ class S3ObjectManager(BaseClass):
         return pickle.loads(file_data)
 
     def _load_latest(self, step: str, data_type: str):
+        """
+        Load latest versioned data from bucket.
+        """
         file_list = self.list_files(data_type=data_type, step=step)
         last_modified = max([file['LastModified'] for file in file_list])
         file_data = None
