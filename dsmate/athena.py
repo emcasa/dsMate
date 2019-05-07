@@ -5,7 +5,7 @@ import time
 
 class Athena:
 
-    def __init__(self, database, bucket_name, project_name, region='us-east-1'):
+    def __init__(self, database, bucket_name, project_name, region='us-east-1', **kwargs):
         self.region = region
         self.database = database
         self.bucket_name = bucket_name
