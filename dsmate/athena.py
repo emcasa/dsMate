@@ -11,6 +11,7 @@ class Athena:
         self.bucket_name = bucket_name
         self.project_name = project_name
         self.session = boto3.Session()
+        self.s3_path = 's3://' + self.bucket_name + '/' + self.project_name + '/data-acquisition/csv'
         self.client = self.session.client('athena', region_name=self.region)
 
     def query(self, sql):
@@ -18,7 +19,7 @@ class Athena:
             QueryString=sql,
             QueryExecutionContext={'Database': self.database},
             ResultConfiguration={
-                'OutputLocation': 's3://' + self.bucket_name + '/' + self.project_name + '/data-acquisition/csv'
+                'OutputLocation': self.s3_path
             }
         )
         return response
