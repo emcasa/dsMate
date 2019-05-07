@@ -1,5 +1,6 @@
 from dsmate.athena import Athena
 import pandas as pd
+from dsmate.framework import VersionControl
 
 
 class Acquisitor:
@@ -17,11 +18,10 @@ class Acquisitor:
 
     def __init__(self, sql, params):
         self.sql = sql
-        self.dataframe = None
         self.filename = None
         self.params = params
 
-    def execute_query(self):
+    def _execute_query(self):
         """
         Execute query and save data to S3
         """
@@ -29,10 +29,22 @@ class Acquisitor:
         self.filename = athena.query_to_s3(self.sql)
         return self.filename
 
-    def load_dataframe(self):
+    def _load_dataframe(self):
         """
         Load data from S3 file.
         """
         athena = Athena(**self.params)
         df = pd.read_csv(athena.s3_path + '/' + self.filename)
         return df
+
+    def run(self):
+        """
+        Run acquisition and version control
+        """
+        version_control = VersionControl(step='data-acquisition', **self.params)
+        self._execute_query()
+        dataframe = self._load_dataframe()
+        version_control.save(object_type='dataframe', data=dataframe)
+        version_control.save(object_type='acquisitor', data=self)
+
+        return version_control.load_latest('acquisitor'), version_control.load_latest('dataframe')

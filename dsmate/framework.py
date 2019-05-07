@@ -5,9 +5,12 @@ from datetime import datetime
 
 class VersionControl(S3ObjectManager):
 
-    def __init__(self, bucket_name, project_name, step, **kwargs):
+    def __init__(self, bucket_name, project_name, step, file_hash=None, **kwargs):
         S3ObjectManager.__init__(self, bucket_name, project_name)
-        self.file_hash = str(uuid4())
+        if isinstance(file_hash, type(None)):
+            self.file_hash = str(uuid4())
+        else:
+            self.file_hash = file_hash
         self.step = step
         self.data = None
         self.object_data = None
@@ -53,6 +56,7 @@ class VersionControl(S3ObjectManager):
             'bucket_name': self.bucket_name,
             'project_name': self.project_name,
             'step': self.step,
+            'file_hash': self.file_hash,
             'created_at': datetime.today(),
             'object_type': object_type,
             'data': data
