@@ -82,7 +82,7 @@ class RedshiftAcquisitor:
         Load dataframe from S3.
         """
         redshift = Redshift(**self.kwargs)
-        dataframe = pd.read_csv('s3://' + redshift.s3_path + '/' + self.filename)
+        dataframe = pd.read_csv('s3://' + redshift.bucket_name + '/' + redshift.s3_path + '/' + self.filename)
         return dataframe
 
     def run(self):
